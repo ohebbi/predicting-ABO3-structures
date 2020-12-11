@@ -1,0 +1,220 @@
+aurl,auid,data_api,title,data_source,loop,code,compound,prototype,nspecies,natoms,natoms_orig,composition,density,density_orig,scintillation_attenuation_length,stoichiometry,species,species_pp,dft_type,species_pp_version,species_pp_ZVAL,ldau_type,ldau_l,ldau_u,ldau_j,ldau_TLUJ,valence_cell_iupac,valence_cell_std,volume_cell,volume_atom,volume_cell_orig,volume_atom_orig,pressure,stress_tensor,pressure_residual,Pulay_stress,geometry,geometry_orig,Egap,Egap_fit,Egap_type,energy_cell,energy_atom,energy_cutoff,delta_electronic_energy_convergence,delta_electronic_energy_threshold,kpoints_relax,kpoints_static,kpoints_bands_path,kpoints_bands_nkpts,kpoints,enthalpy_cell,enthalpy_atom,eentropy_cell,eentropy_atom,PV_cell,PV_atom,spin_cell,spin_atom,spinD,spinF,stoich,calculation_time,calculation_memory,calculation_cores,nbondxx,sg,sg2,spacegroup_orig,spacegroup_relax,forces,positions_cartesian,positions_fractional,Bravais_lattice_orig,lattice_variation_orig,lattice_system_orig,Pearson_symbol_orig,Bravais_lattice_relax,lattice_variation_relax,lattice_system_relax,Pearson_symbol_relax,crystal_family_orig,crystal_system_orig,crystal_class_orig,point_group_Hermann_Mauguin_orig,point_group_Schoenflies_orig,point_group_orbifold_orig,point_group_type_orig,point_group_order_orig,point_group_structure_orig,Bravais_lattice_lattice_type_orig,Bravais_lattice_lattice_variation_type_orig,Bravais_lattice_lattice_system_orig,Bravais_superlattice_lattice_type_orig,Bravais_superlattice_lattice_variation_type_orig,Bravais_superlattice_lattice_system_orig,Pearson_symbol_superlattice_orig,reciprocal_geometry_orig,reciprocal_volume_cell_orig,reciprocal_lattice_type_orig,reciprocal_lattice_variation_type_orig,Wyckoff_letters_orig,Wyckoff_multiplicities_orig,Wyckoff_site_symmetries_orig,crystal_family,crystal_system,crystal_class,point_group_Hermann_Mauguin,point_group_Schoenflies,point_group_orbifold,point_group_type,point_group_order,point_group_structure,Bravais_lattice_lattice_type,Bravais_lattice_lattice_variation_type,Bravais_lattice_lattice_system,Bravais_superlattice_lattice_type,Bravais_superlattice_lattice_variation_type,Bravais_superlattice_lattice_system,Pearson_symbol_superlattice,reciprocal_geometry,reciprocal_volume_cell,reciprocal_lattice_type,reciprocal_lattice_variation_type,Wyckoff_letters,Wyckoff_multiplicities,Wyckoff_site_symmetries,anrl_label_orig,anrl_parameter_list_orig,anrl_parameter_values_orig,anrl_label_relax,anrl_parameter_list_relax,anrl_parameter_values_relax,bader_net_charges,bader_atomic_volumes,node_CPU_Model,node_CPU_Cores,node_CPU_MHz,node_RAM_GB,aflow_version,catalog,aflowlib_version,aflowlib_date,aapi
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/FCC/Hf1_ICSD_41519,aflow:bf824c5adb6040a1,"aapi1.2
+",None,['aflowlib\n'],"['bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Hf1,"Hf1_ICSD_41519
+",1,1,None,[1],13.2201,None,0.639465,[1],['Hf\n'],['Hf_pv\n'],['PAW_PBE\n'],['Hf_pv:PAW_PBE:06Sep2000\n'],[10],None,None,None,None,,4,4,22.4196,22.4196,None,None,0,[-0.03  0.    0.    0.   -0.03  0.    0.    0.   -0.03],-0.03,0,[ 3.165055  3.165055  3.165055 60.       60.       60.      ],None,0.0,0.0,"metal
+",-9.88133,-9.88133,[308.5],6.0334e-07,1e-06,None,None,None,None,"{'relaxation': array([20, 20, 20]), 'static': array([22, 22, 22]), 'points': ['\\Gamma', 'X,X', 'W,W', 'K,K', '\\Gamma,\\Gamma', 'L,L', 'U,U', 'W,W', 'L,L', 'K,U', 'X'], 'nsamples': 20}",-9.88133,-9.88133,0.00018126,0.00018126,0,0,0,0,[0],0,[1.0],2554.48,252.29,32,[3.1651],"['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']","['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']",225,225,[[-0.  0. -0.]],[[-0. -0. -0.]],[[-0. -0. -0.]],"FCC
+","FCC
+","cubic
+","cF4
+","FCC
+","FCC
+","cubic
+","cF4
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[0.],[22.4196],"AMD_Opteron(tm)_Processor_6378___
+",64,1400,253,"aflow30984
+","ICSD
+","3.1.222
+","20190409_05:40:25_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/BCC/Hf1_ICSD_76412,aflow:2e0eeeeeb39cfa1e,"aapi1.2
+",None,['aflowlib\n'],"['bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Hf1,"Hf1_ICSD_76412
+",1,1,None,[1],13.3661,None,0.632479,[1],['Hf\n'],['Hf_pv\n'],['PAW_PBE\n'],['Hf_pv:PAW_PBE:06Sep2000\n'],[10],None,None,None,None,,4,4,22.1747,22.1747,None,None,0,[-0.11 -0.    0.   -0.   -0.11 -0.    0.   -0.   -0.11],-0.11,0,[  3.065443   3.065443   3.065443 109.4712   109.4712   109.4712  ],None,0.0,0.0,"metal
+",-9.77294,-9.77294,[308.5],-9.43821e-08,1e-06,None,None,None,None,"{'relaxation': array([32, 32, 32]), 'static': array([22, 22, 22]), 'points': ['\\Gamma', 'H,H', 'N,N', '\\Gamma,\\Gamma', 'P,P', 'H,P', 'N'], 'nsamples': 20}",-9.77294,-9.77294,0.00039422,0.00039422,0,0,0,0,[0],0,[1.0],13072.6,284.48,16,[3.0654],"['Im-3m #229', 'Im-3m #229', 'Im-3m #229\n']","['Im-3m #229', 'Im-3m #229', 'Im-3m #229\n']",229,229,[[-0.  0. -0.]],[[-0.  0. -0.]],[[-0. -0. -0.]],"BCC
+","BCC
+","cubic
+","cI2
+","BCC
+","BCC
+","cubic
+","cI2
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[-0.],[22.1747],"AMD_Opteron(tm)_Processor_6378___
+",64,2400,253,"aflow30847
+","ICSD
+","3.1.221
+","20190403_07:18:08_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/BCC/Hf1_ICSD_104208,aflow:b977b66984e88a1e,"aapi1.2
+",None,['aflowlib\n'],"['bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Hf1,"Hf1_ICSD_104208
+",1,1,None,[1],13.3688,None,0.63235,[1],['Hf\n'],['Hf_pv\n'],['PAW_PBE\n'],['Hf_pv:PAW_PBE:06Sep2000\n'],[10],None,None,None,None,,4,4,22.1702,22.1702,None,None,0,[ 0.3 -0.  -0.  -0.   0.3  0.  -0.   0.   0.3],0.3,0,[  3.065235   3.065235   3.065235 109.4712   109.4712   109.4712  ],None,0.0,0.0,"metal
+",-9.77303,-9.77303,[308.5],3.20396e-07,1e-06,None,None,None,None,"{'relaxation': array([32, 32, 32]), 'static': array([22, 22, 22]), 'points': ['\\Gamma', 'H,H', 'N,N', '\\Gamma,\\Gamma', 'P,P', 'H,P', 'N'], 'nsamples': 20}",-9.77303,-9.77303,0.00039375,0.00039375,0,0,0,0,[0],0,[1.0],2603.55,312.48,16,[3.0652],"['Im-3m #229', 'Im-3m #229', 'Im-3m #229\n']","['Im-3m #229', 'Im-3m #229', 'Im-3m #229\n']",229,229,[[ 0. -0.  0.]],[[-0. -0. -0.]],[[-0. -0. -0.]],"BCC
+","BCC
+","cubic
+","cI2
+","BCC
+","BCC
+","cubic
+","cI2
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[-0.],[22.1702],"AMD_Opteron(TM)_Processor_6274___
+",64,1400,253,"aflow30847
+","ICSD
+","3.1.222
+","20190407_21:11:44_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/BCC/Hf1_ICSD_53023,aflow:75b2924da8e12440,"aapi1.2
+",None,['aflowlib\n'],"['bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Hf1,"Hf1_ICSD_53023
+",1,1,None,[1],13.3701,None,0.632291,[1],['Hf\n'],['Hf_pv\n'],['PAW_PBE\n'],['Hf_pv:PAW_PBE:06Sep2000\n'],[10],None,None,None,None,,4,4,22.1681,22.1681,None,None,0,[0.18 0.   0.   0.   0.18 0.   0.   0.   0.18],0.18,0,[  3.06514   3.06514   3.06514 109.4712  109.4712  109.4712 ],None,0.0,0.0,"metal
+",-9.7744,-9.7744,[308.5],4.42914e-07,1e-06,None,None,None,None,"{'relaxation': array([20, 20, 20]), 'static': array([22, 22, 22]), 'points': ['\\Gamma', 'H,H', 'N,N', '\\Gamma,\\Gamma', 'P,P', 'H,P', 'N'], 'nsamples': 20}",-9.7744,-9.7744,0.00098212,0.00098212,0,0,0,0,[0],0,[1.0],1832.18,88.35,32,[3.0651],"['Im-3m #229', 'Im-3m #229', 'Im-3m #229\n']","['Im-3m #229', 'Im-3m #229', 'Im-3m #229\n']",229,229,[[ 0. -0.  0.]],[[-0. -0.  0.]],[[-0. -0. -0.]],"BCC
+","BCC
+","cubic
+","cI2
+","BCC
+","BCC
+","cubic
+","cI2
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[-0.],[22.1681],"AMD_Opteron(tm)_Processor_6378___
+",64,1400,253,"aflow30910
+","ICSD
+","3.1.222
+","20190407_23:37:11_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/FCC/Ba1Te1_ICSD_43656,aflow:9cb3dd8018da6713,"aapi1.2
+",None,['aflowlib\n'],"['bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Ba1Te1,"Ba1Te1_ICSD_43656
+",2,2,None,[1 1],4.94443,None,2.26744,[0.5 0.5],"['Ba', 'Te\n']","['Ba_sv', 'Te\n']",['PAW_PBE\n'],"['Ba_sv:PAW_PBE:06Sep2000', 'Te:PAW_PBE:08Apr2002\n']",[10  6],None,None,None,None,,8,8,88.9742,44.4871,None,None,0,[ 0.31 -0.   -0.   -0.    0.31  0.   -0.    0.    0.31],0.31,0,[ 5.011023  5.011023  5.011023 60.       60.       60.      ],None,1.5907,3.05726,"insulator-indirect
+",-8.64769,-4.32384,[262.1],-5.56403e-05,0.0001,None,None,None,None,"{'relaxation': array([14, 14, 14]), 'static': array([18, 18, 18]), 'points': ['\\Gamma', 'X,X', 'W,W', 'K,K', '\\Gamma,\\Gamma', 'L,L', 'U,U', 'W,W', 'L,L', 'K,U', 'X'], 'nsamples': 20}",-8.64769,-4.32384,0.00021837,0.000109185,0,0,0,0,[0 0],0,"[0.5, 0.5]",2784.32,375.42,16,[5.011  3.5433 5.011 ],"['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']","['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']",225,225,"[[ 0.  0.  0.]
+ [ 0.  0. -0.]]","[[0.      0.      0.     ]
+ [3.54333 3.54333 3.54333]]","[[0.  0.  0. ]
+ [0.5 0.5 0.5]]","FCC
+","FCC
+","cubic
+","cF8
+","FCC
+","FCC
+","cubic
+","cF8
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[ 1.3545 -1.3545],[31.9603 57.014 ],"AMD_Opteron(tm)_Processor_6378___
+",64,1400,253,"aflow30831
+","ICSD
+","3.1.222
+","20190407_23:05:00_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/FCC/Ba1Te1_ICSD_616163,aflow:d2c46a657f5bf36c,"aapi1.2
+",None,['aflowlib\n'],"['bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Ba1Te1,"Ba1Te1_ICSD_616163
+",2,2,None,[1 1],4.94101,None,2.26901,[0.5 0.5],"['Ba', 'Te\n']","['Ba_sv', 'Te\n']",['PAW_PBE\n'],"['Ba_sv:PAW_PBE:06Sep2000', 'Te:PAW_PBE:08Apr2002\n']",[10  6],None,None,None,None,,8,8,89.0358,44.5179,None,None,0,[-1.26  0.   -0.    0.   -1.26  0.   -0.    0.   -1.26],-1.26,0,[ 5.012178  5.012178  5.012178 60.       60.       60.      ],None,1.5921,3.05915,"insulator-indirect
+",-8.64766,-4.32383,[262.1],3.06987e-05,0.0001,None,None,None,None,"{'relaxation': array([14, 14, 14]), 'static': array([18, 18, 18]), 'points': ['\\Gamma', 'X,X', 'W,W', 'K,K', '\\Gamma,\\Gamma', 'L,L', 'U,U', 'W,W', 'L,L', 'K,U', 'X'], 'nsamples': 20}",-8.64766,-4.32383,0.00021879,0.000109395,0,0,0,0,[0 0],0,"[0.5, 0.5]",761.287,375.67,16,[5.0122 3.5441 5.0122],"['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']","['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']",225,225,"[[ 0.  0. -0.]
+ [ 0.  0.  0.]]","[[0.      0.      0.     ]
+ [3.54415 3.54415 3.54415]]","[[ 0.   0.  -0. ]
+ [ 0.5  0.5  0.5]]","FCC
+","FCC
+","cubic
+","cF8
+","FCC
+","FCC
+","cubic
+","cF8
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[ 1.3549 -1.3549],[31.968  57.0679],"AMD_Opteron(tm)_Processor_6378___
+",64,1400,253,"aflow30831
+","ICSD
+","3.1.222
+","20190404_16:23:16_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/FCC/Ba1Te1_ICSD_616165,aflow:1c9c8b13be804a36,"aapi1.2
+",None,['aflowlib\n'],"['bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Ba1Te1,"Ba1Te1_ICSD_616165
+",2,2,None,[1 1],4.94439,None,2.26745,[0.5 0.5],"['Ba', 'Te\n']","['Ba_sv', 'Te\n']",['PAW_PBE\n'],"['Ba_sv:PAW_PBE:06Sep2000', 'Te:PAW_PBE:08Apr2002\n']",[10  6],None,None,None,None,,8,8,88.9749,44.4874,None,None,0,[ 0.31 -0.    0.   -0.    0.31  0.    0.    0.    0.31],0.31,0,[ 5.011035  5.011035  5.011035 60.       60.       60.      ],None,1.5908,3.0574,"insulator-indirect
+",-8.64769,-4.32384,[262.1],-5.56422e-05,0.0001,None,None,None,None,"{'relaxation': array([14, 14, 14]), 'static': array([18, 18, 18]), 'points': ['\\Gamma', 'X,X', 'W,W', 'K,K', '\\Gamma,\\Gamma', 'L,L', 'U,U', 'W,W', 'L,L', 'K,U', 'X'], 'nsamples': 20}",-8.64769,-4.32384,0.00021837,0.000109185,0,0,0,0,[0 0],0,"[0.5, 0.5]",1525.96,375.42,16,[5.011  3.5433 5.011 ],"['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']","['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']",225,225,"[[0. 0. 0.]
+ [0. 0. 0.]]","[[0.      0.      0.     ]
+ [3.54334 3.54334 3.54334]]","[[0.  0.  0. ]
+ [0.5 0.5 0.5]]","FCC
+","FCC
+","cubic
+","cF8
+","FCC
+","FCC
+","cubic
+","cF8
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[ 1.3545 -1.3545],[31.9605 57.0144],"AMD_Opteron(TM)_Processor_6274___
+",64,1400,253,"aflow30847
+","ICSD
+","3.1.222
+","20190407_03:43:24_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/FCC/Ba1Te1_ICSD_29152,aflow:f92c7225e1387152,"aapi1.2
+",None,['aflowlib\n'],"['ael', 'agl', 'bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Ba1Te1,"Ba1Te1_ICSD_29152
+",2,2,None,[1 1],4.94076,None,2.26912,[0.5 0.5],"['Ba', 'Te\n']","['Ba_sv', 'Te\n']",['PAW_PBE\n'],"['Ba_sv:PAW_PBE:06Sep2000', 'Te:PAW_PBE:08Apr2002\n']",[10  6],None,None,None,None,,8,8,89.0403,44.5202,None,None,0,[-1.3  0.   0.   0.  -1.3  0.   0.   0.  -1.3],-1.3,0,[ 5.012264  5.012264  5.012264 60.       60.       60.      ],None,1.5922,3.05929,"insulator-indirect
+",-8.64766,-4.32383,[262.1],3.18052e-05,0.0001,None,None,None,None,"{'relaxation': array([16, 16, 16]), 'static': array([18, 18, 18]), 'points': ['\\Gamma', 'X,X', 'W,W', 'K,K', '\\Gamma,\\Gamma', 'L,L', 'U,U', 'W,W', 'L,L', 'K,U', 'X'], 'nsamples': 20}",-8.64766,-4.32383,0.00022203,0.000111015,0,0,0,0,[0 0],0,"[0.5, 0.5]",2113.56,483.32,32,[5.0123 3.5442 5.0123],"['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']","['Fm-3m #225', 'Fm-3m #225', 'Fm-3m #225\n']",225,225,"[[ 0.  0. -0.]
+ [ 0.  0.  0.]]","[[ 0.       0.      -0.     ]
+ [ 3.54421  3.54421  3.54421]]","[[-0.   0.   0. ]
+ [ 0.5  0.5  0.5]]","FCC
+","FCC
+","cubic
+","cF8
+","FCC
+","FCC
+","cubic
+","cF8
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[ 1.3549 -1.3549],[31.9696 57.0708],"AMD_Opteron(TM)_Processor_6274___
+",64,1400,253,"aflow30910
+","ICSD
+","3.1.221
+","20190402_23:02:25_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/CUB/Ba1Te1_ICSD_108097,aflow:e00b430dded98dba,"aapi1.2
+",None,['aflowlib\n'],"['ael', 'agl', 'bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Ba1Te1,"Ba1Te1_ICSD_108097
+",2,2,None,[1 1],5.67639,None,1.97505,[0.5 0.5],"['Ba', 'Te\n']","['Ba_sv', 'Te\n']",['PAW_PBE\n'],"['Ba_sv:PAW_PBE:06Sep2000', 'Te:PAW_PBE:08Apr2002\n']",[10  6],None,None,None,None,,8,8,77.5011,38.7506,None,None,0,[ 0.18  0.   -0.    0.    0.18  0.   -0.    0.    0.18],0.18,0,[ 4.26353  4.26353  4.26353 90.      90.      90.     ],None,0.7815,1.96646,"insulator-indirect
+",-8.31275,-4.15638,[262.1],3.46069e-06,0.0001,None,None,None,None,"{'relaxation': array([16, 16, 16]), 'static': array([18, 18, 18]), 'points': ['\\Gamma', 'X,X', 'M,M', '\\Gamma,\\Gamma', 'R,R', 'X,M', 'R'], 'nsamples': 20}",-8.31275,-4.15638,0.00012588,6.294e-05,0,0,0,0,[0 0],0,"[0.5, 0.5]",792.753,106.58,32,[4.2635 3.6923 4.2635],"['Pm-3m #221', 'Pm-3m #221', 'Pm-3m #221\n']","['Pm-3m #221', 'Pm-3m #221', 'Pm-3m #221\n']",221,221,"[[-0.  0.  0.]
+ [ 0.  0.  0.]]","[[0.      0.      0.     ]
+ [2.13176 2.13176 2.13176]]","[[0.  0.  0. ]
+ [0.5 0.5 0.5]]","CUB
+","CUB
+","cubic
+","cP2
+","CUB
+","CUB
+","cubic
+","cP2
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[ 1.3175 -1.3175],[29.9832 47.5179],"AMD_Opteron(tm)_Processor_6378___
+",64,2400,253,"aflow30977
+","ICSD
+","3.1.222
+","20190406_21:50:09_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/CUB/Ba1Te1_ICSD_616162,aflow:17040d0421b69a63,"aapi1.2
+",None,['aflowlib\n'],"['bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Ba1Te1,"Ba1Te1_ICSD_616162
+",2,2,None,[1 1],5.67895,None,1.97416,[0.5 0.5],"['Ba', 'Te\n']","['Ba_sv', 'Te\n']",['PAW_PBE\n'],"['Ba_sv:PAW_PBE:06Sep2000', 'Te:PAW_PBE:08Apr2002\n']",[10  6],None,None,None,None,,8,8,77.4662,38.7331,None,None,0,[ 0.2 -0.   0.  -0.   0.2 -0.   0.  -0.   0.2],0.2,0,[ 4.262889  4.262889  4.262889 90.       90.       90.      ],None,0.7805,1.96511,"insulator-indirect
+",-8.31283,-4.15641,[262.1],1.94747e-06,0.0001,None,None,None,None,"{'relaxation': array([14, 14, 14]), 'static': array([18, 18, 18]), 'points': ['\\Gamma', 'X,X', 'M,M', '\\Gamma,\\Gamma', 'R,R', 'X,M', 'R'], 'nsamples': 20}",-8.31283,-4.15641,0.00013783,6.8915e-05,0,0,0,0,[0 0],0,"[0.5, 0.5]",505.113,94.48,16,[4.2629 3.6918 4.2629],"['Pm-3m #221', 'Pm-3m #221', 'Pm-3m #221\n']","['Pm-3m #221', 'Pm-3m #221', 'Pm-3m #221\n']",221,221,"[[ 0.  0.  0.]
+ [-0. -0.  0.]]","[[0.      0.      0.     ]
+ [2.13144 2.13144 2.13144]]","[[0.  0.  0. ]
+ [0.5 0.5 0.5]]","CUB
+","CUB
+","cubic
+","cP2
+","CUB
+","CUB
+","cubic
+","cP2
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[ 1.3175 -1.3175],[29.9697 47.4965],"AMD_Opteron(TM)_Processor_6274___
+",64,2200,253,"aflow30847
+","ICSD
+","3.1.221
+","20190329_06:28:23_GMT-5
+",None
+aflowlib.duke.edu:AFLOWDATA/ICSD_WEB/CUB/Ba1Te1_ICSD_616164,aflow:0acb027a38dcb300,"aapi1.2
+",None,['aflowlib\n'],"['bader', 'bands', 'lock', 'magnetic', 'thermodynamics\n']","vasp.4.6.35
+",Ba1Te1,"Ba1Te1_ICSD_616164
+",2,2,None,[1 1],5.67631,None,1.97508,[0.5 0.5],"['Ba', 'Te\n']","['Ba_sv', 'Te\n']",['PAW_PBE\n'],"['Ba_sv:PAW_PBE:06Sep2000', 'Te:PAW_PBE:08Apr2002\n']",[10  6],None,None,None,None,,8,8,77.5023,38.7511,None,None,0,[ 0.2  0.  -0.   0.   0.2 -0.  -0.  -0.   0.2],0.2,0,[ 4.263551  4.263551  4.263551 90.       90.       90.      ],None,0.7816,1.9666,"insulator-indirect
+",-8.31276,-4.15638,[262.1],4.0261e-06,0.0001,None,None,None,None,"{'relaxation': array([14, 14, 14]), 'static': array([18, 18, 18]), 'points': ['\\Gamma', 'X,X', 'M,M', '\\Gamma,\\Gamma', 'R,R', 'X,M', 'R'], 'nsamples': 20}",-8.31276,-4.15638,0.00013805,6.9025e-05,0,0,0,0,[0 0],0,"[0.5, 0.5]",647.274,94.5,16,[4.2636 3.6923 4.2636],"['Pm-3m #221', 'Pm-3m #221', 'Pm-3m #221\n']","['Pm-3m #221', 'Pm-3m #221', 'Pm-3m #221\n']",221,221,"[[-0.  0.  0.]
+ [ 0. -0.  0.]]","[[0.      0.      0.     ]
+ [2.13178 2.13178 2.13178]]","[[0.  0.  0. ]
+ [0.5 0.5 0.5]]","CUB
+","CUB
+","cubic
+","cP2
+","CUB
+","CUB
+","cubic
+","cP2
+",None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,None,[ 1.3175 -1.3175],[29.9836 47.5186],"AMD_Opteron(tm)_Processor_6378___
+",64,2400,253,"aflow30847
+","ICSD
+","3.1.221
+","20190403_13:19:08_GMT-5
+",None
