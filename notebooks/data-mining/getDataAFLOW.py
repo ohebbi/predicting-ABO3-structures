@@ -13,19 +13,21 @@ import os
 if not os.path.exists('data'):
     os.makedirs('data')
     
-def get_dataframe_AFLOW(compound_list, keys, batch_size):
+def get_dataframe_AFLOW(compound_list, keys, batch_size, catalog="icsd"):
     """
-    A function used to make a query to AFLOW. 
+    A function used to make a query to AFLOW with icsd catalog. 
     ...
     Args
     ----------
     compound_list : list (dim:N)
         A list of strings containing full formula, eg. H2O1 or Si1C1
     keys : list (dim:M)
-        A list containing the features of the compound one wants to extract,
+        A list containing the features of the compound, found in documentation of AFLUX.  
         eg. Egap
     batch_size : int
         Number of data entries to return per HTTP request
+    catalog : str
+        "icsd" for ICSD
 
     Returns
     -------
@@ -34,24 +36,18 @@ def get_dataframe_AFLOW(compound_list, keys, batch_size):
         in several matching compounds
     """
     index = 0
-    # Looping through every compound
     for compound in tqdm(compound_list):
         print("Current query: {}".format(compound))
 
-        # Original filter. Here we choose entries in AFLOW based on ICSD.
-        results = search(catalog='icsd', batch_size=batch_size)\
+        results = search(catalog=catalog, batch_size=batch_size)\
             .filter(K.compound==compound)
 
-        # If search returns matching query
         if len(results)>0:
-            # Looping through every result gained from query with a compound
             for result in tqdm(results):
                 for key in keys:
                     try:
-                        # The query for features
                         aflow_dict[key].append(getattr(result,key))
                     except:
-                        # If no matching feature for given compound
                         aflow_dict[key].append("None")
 
                 pd.DataFrame.from_dict(aflow_dict).loc[[index]].to_csv("data/AFLOW_DATA_temp.csv",
