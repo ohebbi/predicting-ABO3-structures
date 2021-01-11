@@ -8,15 +8,20 @@ from tqdm import tqdm
 
 # ML library and structural library
 from aflowml.client import AFLOWmlAPI
+
 from pymatgen import Structure
 from pymatgen.io.vasp.inputs import Poscar
+from pymatgen.io.cif import CifParser
 
-def get_dataframe_AFLOW_ML(entries):
+import os
+if not os.path.exists('data'):
+    os.makedirs('data')
+    
+def get_dataframe_AFLOWML(entries, fileName = False):
     """
-    A function used to make a query to AFLOW, and will return as much
-    information as possible.
+    A function used to initialise AFLOW-ML with appropiate inputs.
     ...
-    Parameters
+    Args
     ----------
     entries : Pandas DataFrame
     {
@@ -27,6 +32,69 @@ def get_dataframe_AFLOW_ML(entries):
         "material id": []
             - list of strings
     }
+    fileName : str
+        Path to file, e.g. "data/aflow_ml.csv" 
+        Writing to a file during iterations. Recommended for large entries.
+
+    Returns
+    -------
+    dict
+        A dictionary containing features as compound and material id,
+        as well as the keys in the AFLOW-ML algorithm Property
+        Labeled Material Fragments.
+    """
+    def writeToFile(fileNamePath, row):
+        row.to_csv(fileNamePath,
+            sep=",",
+            index=False,
+            header=False,
+            mode='a')
+        
+    firstIteration = True
+    for index, entry in tqdm(entries.iterrows()):
+
+        struc = CifParser.from_string(entry["cif"]).get_structures()[0]
+   
+        poscar = Poscar(structure=struc)
+
+        ml = AFLOWmlAPI()
+        prediction = ml.get_prediction(poscar, 'plmf')
+
+        if firstIteration:
+            aflowml_dict = {k: [] for k in prediction.keys()}
+            aflowml_dict["full_formula"]    = []
+            aflowml_dict["material_id"] = []
+            firstIteration = False
+
+        for key in prediction.keys():
+            aflowml_dict[key].append(prediction[key])
+
+        aflowml_dict["full_formula"].append(entry["full_formula"])
+        aflowml_dict["material_id"].append(entry["material_id"])
+        
+        if (pathAndFileName):
+            writeToFile(fileName, row=pd.DataFrame.from_dict(aflowml_dict).loc[[index]])
+
+    return aflowml_dict
+
+def get_dataframe_AFLOW(entries, fileName = None):
+    """
+    A function used to initialise AFLOW-ML with appropiate inputs.
+    ...
+    Args
+    ----------
+    entries : Pandas DataFrame
+    {
+        "cif": {}
+            - Materials Project parameter "cif", which is a dict
+        "compound": []
+            - list of strings
+        "material id": []
+            - list of strings
+    }
+    fileName : str
+        Path to file, e.g. "data/aflow_ml.csv" 
+        Writing to a file during iterations. Recommended for large entries.
 
     Returns
     -------
@@ -35,46 +103,14 @@ def get_dataframe_AFLOW_ML(entries):
         as well as the keys in the AFLOW-ML algorithm Property
         Labeled Material Fragments.
     """
-
-    firstIteration = True
-    for index, entry in tqdm(entries.iterrows()):
-
-        outF = open("data/prepForPoscar.cif", "w")
-        outF.writelines(entry["cif"])
-        outF.close()
-
-        struc = Structure.from_file("data/prepForPoscar.cif")
-        poscar = Poscar(structure=struc)
-
-        ml = AFLOWmlAPI()
-        prediction = ml.get_prediction(poscar, 'plmf')
-
-        if firstIteration:
-            AFLOW_ML = {k: [] for k in prediction.keys()}
-            AFLOW_ML["full_formula"]    = []
-            AFLOW_ML["material_id"] = []
-            firstIteration = False
-
-        for key in prediction.keys():
-            AFLOW_ML[key].append(prediction[key])
-
-        AFLOW_ML["full_formula"].append(entry["full_formula"])
-        AFLOW_ML["material_id"].append(entry["material_id"])
-
-        pd.DataFrame.from_dict(AFLOW_ML).loc[[index]].to_csv("data/AFLOW_ML_DATA_temp.csv",
-        sep=",",
-        index=False,
-        header=False,
-        mode='a')
-
-    return pd.DataFrame.from_dict(AFLOW_ML)
+    return pd.DataFrame.from_dict(get_dataframe_AFLOWML(entries, fileName))
 
 if __name__ == '__main__':
 
     #reading entries from MP
-    MP_entries = pd.read_csv("data/MP_DATA.csv", sep=",")
+    MP_entries = pd.read_csv("data/MP_data_stage_2.csv", sep=",")
 
-    AFLOW_ML = get_dataframe_AFLOW_ML(entries=MP_entries)
+    AFLOW_ML = get_dataframe_AFLOWML(entries=MP_entries, pathAndFileName="data/AFLOWML_data_temp.csv")
 
-    #writing to
-    AFLOW_ML.to_csv("data/AFLOW_ML_DATA.csv", sep=",", index = False)
+    #writing to file
+    AFLOW_ML.to_csv("data/AFLOWML_data.csv", sep=",", index = False)
