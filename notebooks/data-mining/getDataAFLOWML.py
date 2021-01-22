@@ -15,8 +15,8 @@ from pymatgen.io.cif import CifParser
 
 import os
 if not os.path.exists('data'):
-    os.makedirs('data')
-    
+    os.makedirs('data/data_extraction/AFLOWML')
+
 def get_dataframe_AFLOWML(entries, fileName = False):
     """
     A function used to initialise AFLOW-ML with appropiate inputs.
@@ -33,7 +33,7 @@ def get_dataframe_AFLOWML(entries, fileName = False):
             - list of strings
     }
     fileName : str
-        Path to file, e.g. "data/aflow_ml.csv" 
+        Path to file, e.g. "data/aflow_ml.csv"
         Writing to a file during iterations. Recommended for large entries.
 
     Returns
@@ -43,18 +43,12 @@ def get_dataframe_AFLOWML(entries, fileName = False):
         as well as the keys in the AFLOW-ML algorithm Property
         Labeled Material Fragments.
     """
-    def writeToFile(fileNamePath, row):
-        row.to_csv(fileNamePath,
-            sep=",",
-            index=False,
-            header=False,
-            mode='a')
-        
+
     firstIteration = True
     for index, entry in tqdm(entries.iterrows()):
 
         struc = CifParser.from_string(entry["cif"]).get_structures()[0]
-   
+
         poscar = Poscar(structure=struc)
 
         ml = AFLOWmlAPI()
@@ -62,8 +56,8 @@ def get_dataframe_AFLOWML(entries, fileName = False):
 
         if firstIteration:
             aflowml_dict = {k: [] for k in prediction.keys()}
-            aflowml_dict["full_formula"]    = []
-            aflowml_dict["material_id"] = []
+            aflowml_dict["full_formula"] = []
+            aflowml_dict["material_id"]  = []
             firstIteration = False
 
         for key in prediction.keys():
@@ -71,9 +65,10 @@ def get_dataframe_AFLOWML(entries, fileName = False):
 
         aflowml_dict["full_formula"].append(entry["full_formula"])
         aflowml_dict["material_id"].append(entry["material_id"])
-        
-        if (pathAndFileName):
-            writeToFile(fileName, row=pd.DataFrame.from_dict(aflowml_dict).loc[[index]])
+        if (fileName) and (index % 50 == 0):
+            pd.DataFrame.from_dict(aflowml_dict).to_csv(fileName, sep=",",index=False)
+    if fileName:
+        pd.DataFrame.from_dict(aflowml_dict).to_csv(fileName, sep=",",index=False)
 
     return aflowml_dict
 
@@ -83,18 +78,7 @@ def get_dataframe_AFLOW(entries, fileName = None):
     ...
     Args
     ----------
-    entries : Pandas DataFrame
-    {
-        "cif": {}
-            - Materials Project parameter "cif", which is a dict
-        "compound": []
-            - list of strings
-        "material id": []
-            - list of strings
-    }
-    fileName : str
-        Path to file, e.g. "data/aflow_ml.csv" 
-        Writing to a file during iterations. Recommended for large entries.
+    See get_dataframe_AFLOW()
 
     Returns
     -------
@@ -105,12 +89,42 @@ def get_dataframe_AFLOW(entries, fileName = None):
     """
     return pd.DataFrame.from_dict(get_dataframe_AFLOWML(entries, fileName))
 
-if __name__ == '__main__':
-
+def dataMiningProcess():
     #reading entries from MP
-    MP_entries = pd.read_csv("data/MP_data_stage_2.csv", sep=",")
+    MP_entries = pd.read_csv("data/stage_2/MP_data_stage_2.csv", sep=",")
 
-    AFLOW_ML = get_dataframe_AFLOWML(entries=MP_entries, pathAndFileName="data/AFLOWML_data_temp.csv")
+    AFLOW_ML = get_dataframe_AFLOWML(entries=MP_entries, pathAndFileName="data/data_extraction/AFLOWML/AFLOWML_data.csv")
 
     #writing to file
-    AFLOW_ML.to_csv("data/AFLOWML_data.csv", sep=",", index = False)
+    AFLOW_ML.to_csv("data/data_extraction/AFLOWML/AFLOWML_data.csv", sep=",", index = False)
+
+def allMPCompounds():
+    #reading entries from MP
+    MP_entries = pd.read_csv("data/data_extraction/entire_MP_data/MP/MP.csv", sep=",")
+
+    AFLOW_ML = get_dataframe_AFLOWML(entries=MP_entries, fileName="data/data_extraction/entire_MP_data/AFLOWML/AFLOWML_data.csv")
+
+    #writing to file
+    AFLOW_ML.to_csv("data/data_extraction/entire_MP_data/AFLOWML/AFLOWML_data.csv", sep=",", index = False)
+
+
+def reQueueAllMPCompounds():
+    #reading entries from MP
+    MP_entries = pd.read_csv("data/data_extraction/entire_MP_data/MP/MP.csv", sep=",")
+    previous_AFLOWML_entries = pd.read_csv("data/data_extraction/entire_MP_data/AFLOWML/AFLOWML_data.csv", sep=",")
+    #print(previous_AFLOWML_entries.shape[0])
+    #print(previous_AFLOWML_entries.iloc[-1])
+    howFar = MP_entries[MP_entries["full_formula"] == previous_AFLOWML_entries["full_formula"].iloc[-1]].index.values
+    previous_AFLOWML_entries.to_csv("data/data_extraction/entire_MP_data/AFLOWML/AFLOWML_data_" + str(howFar[0]) + ".csv", sep=",", index=False)
+
+    #print(MP_entries.iloc[howFar[0]+1:])
+
+    AFLOW_ML = get_dataframe_AFLOWML(entries=MP_entries.iloc[howFar[0]+1:], fileName="data/data_extraction/entire_MP_data/AFLOWML/AFLOWML_data.csv")
+
+
+
+if __name__ == '__main__':
+    #dataMiningProcess()
+
+    #allMPCompounds()
+    reQueueAllMPCompounds()
