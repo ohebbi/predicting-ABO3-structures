@@ -1,0 +1,52 @@
+# Ignore build-directory
+build
+
+# compiled files:
+*.o
+*.so
+*.a
+# temporary files:
+*.gz
+*.pyc
+*.bak
+*.swp
+*~
+.*~
+*.old
+tmp*
+temp*
+.#*
+\#*
+# tex files:
+*.bbl
+*.bcf
+*.xml
+*.log
+*.dvi
+*.aux
+*.blg
+*.idx
+*.nav
+*.out
+*.fls
+*.fdb_latexmk
+*.toc
+*.snm
+*.vrb
+*.lof
+# eclipse files:
+*.cproject
+*.project
+# misc:
+*.DS_Store
+*.git
+*.xyz
+# jabref files
+*.sav
+
+#folders
+notebooks/data-mining/data/data_extraction/entire_MP_data/MP/MP.csv
+notebooks/data-mining/data/data_extraction/OQMD/OQMD_data.csv
+
+#jupyter notebook checkpoints
+*.ipynb_checkpoints
