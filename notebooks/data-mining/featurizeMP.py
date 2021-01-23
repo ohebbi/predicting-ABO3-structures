@@ -68,8 +68,20 @@ def runFeaturizeMP():
     fileName = "data/data_extraction/entire_MP_data/MP/MP_featurized.csv"
     featurize_by_material_id(MP_entries["material_id"].values, api_key, fileName)
 
-if __name__ == '__main__':
-    runFeaturizeMP()
+def reQueueMPFeaturizer():
+    #reading entries from MP
+    MP_entries =    pd.read_csv("data/data_extraction/entire_MP_data/MP/MP.csv", sep=",")
+    MP_featurized = pd.read_csv("data/data_extraction/entire_MP_data/MP/MP_featurized.csv", sep=",")
 
+    howFar = MP_entries[MP_entries["material_id"] == MP_featurized["material_id"].iloc[-1]].index.values
+    MP_featurized.to_csv("data/data_extraction/entire_MP_data/MP/MP_featurized_" + str(howFar[0]) + ".csv", sep=",", index=False)
+
+    api_key = "b7RtVfJTsUg6TK8E"
+    fileName = "data/data_extraction/entire_MP_data/MP/MP_featurized.csv"
+    featurize_by_material_id(MP_entries["material_id"].iloc[howFar[0]+1:].values, api_key, fileName)
+
+if __name__ == '__main__':
+    #runFeaturizeMP()
+    reQueueMPFeaturizer()
 
     #print(FeaturizedEntries)
