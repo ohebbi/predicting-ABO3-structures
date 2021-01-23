@@ -78,6 +78,7 @@ def reQueueMPFeaturizer():
 
     api_key = "b7RtVfJTsUg6TK8E"
     fileName = "data/data_extraction/entire_MP_data/MP/MP_featurized.csv"
+    print(MP_entries["material_id"].iloc[howFar[0]+1:].values.shape)
     featurize_by_material_id(MP_entries["material_id"].iloc[howFar[0]+1:].values, api_key, fileName)
 
 if __name__ == '__main__':
