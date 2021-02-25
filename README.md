@@ -19,6 +19,10 @@ Project Organization
     ├── models             <- Trained and serialized models, model predictions, or model summaries
     │
     ├── notebooks          <- Jupyter notebooks.
+    │   ├── 01-preprocessing-notebook.ipynb
+    │   ├── 02-generateTestData-notebook.ipynb
+    │   ├── 03-supervisedModels-notebook.ipynb
+    │   └── 04-meshgridAnalysis-notebook.ipynb
     │
     ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
     │
