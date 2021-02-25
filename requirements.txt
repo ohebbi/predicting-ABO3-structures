@@ -111,8 +111,7 @@ sklearn==0.0
 sniffio==1.2.0
 soupsieve==2.1
 spglib==1.16.0
-# Editable install with no version control (src==0.1.0)
--e /Users/ohebbi/Documents/UiO/Masterprosjekt/predicting-perovskites-v2
+-e git+https://github.com/ohebbi/predicting-perovskites.git@fce4fa823fc783b8ad3a1e3f09e35607be513a70#egg=src
 stevedore==3.3.0
 sympy==1.7.1
 tabulate==0.8.7
