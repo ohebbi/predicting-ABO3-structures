@@ -1,4 +1,4 @@
-predicting-perovskites-v2
+## predicting-perovskites
 ==============================
 
 This is the repository for predicting perovskites
