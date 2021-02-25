@@ -1,7 +1,9 @@
-# predicting-ABO3-structures
+# Predicting ABO3 structures
 ==============================
 
-This is the repository for predicting perovskites
+This repository contains the main work regarding the validation part of my master
+thesis. The work can be found in the notebooks, and is written as a Python package
+for complete reproduction with the respective requirements of packages.
 
 Project Organization
 ------------
