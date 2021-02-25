@@ -33,9 +33,8 @@ MANIFEST
 *.manifest
 *.spec
 
-#folders
-notebooks/data-mining/data/data_extraction/entire_MP_data/MP/MP.csv
-notebooks/data-mining/data/data_extraction/OQMD/OQMD_data.csv
+#mac os files
+.DS_Store
 
 # Installer logs
 pip-log.txt
