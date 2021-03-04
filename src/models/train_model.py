@@ -29,6 +29,7 @@ def chooseSampler(sampleMethod):
 
     else:
         return None
+
 def getPipe(model, sampleMethod):
     sampler = chooseSampler(sampleMethod)
     if not (sampler):
