@@ -4,7 +4,7 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
-
+from sklearn.linear_model import LogisticRegression
 from tqdm import tqdm
 import numpy as np
 
@@ -71,6 +71,11 @@ def findParamGrid(model):
                 #"model__criterion": ["friedman_mse",  "mae"],
                 #"model__subsample":[0.5, 0.618, 0.8, 0.85, 0.9, 0.95, 1.0],
                 "model__n_estimators":[10]
+                }
+    elif typeModel == type(LogisticRegression()):#penalty{‘l1’, ‘l2’, ‘elasticnet’, ‘none’}
+        return {"model__penalty":["l2"],# "l2", "elasticnet", "none"],
+                #"model__alpha": [0.001,0.01,0.1,1,10,100,1000],
+                "model__max_iter":[200, 400]
                 }
     else:
         raise TypeError("No model has been specified: type(model):{}".format(typeModel))
