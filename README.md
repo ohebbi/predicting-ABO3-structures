@@ -1,4 +1,4 @@
-# Predicting ABO3 structures
+# Predicting ABO3 structures [![DOI](https://zenodo.org/badge/289915727.svg)](https://zenodo.org/badge/latestdoi/289915727)
 ==============================
 
 This repository contains the main work regarding the validation part of my master
