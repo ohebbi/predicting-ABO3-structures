@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 import shap
 from typing import Optional
@@ -26,7 +27,7 @@ tex_fonts = {
     "font.family": "Palatino",
     "axes.labelsize":12,
     "font.size": 12,
-    "legend.fontsize": 12,
+    "legend.fontsize": 10,
     "xtick.labelsize": 12,
     "ytick.labelsize":12
 }
@@ -439,3 +440,23 @@ def runSupervisedModel(classifier,
     print ("f1-score:{:0.5f}".format(modelResults['f1_score'][-1]))
 
     return modelResults
+def plot_parallel_coordinates(data, color, fileName):
+
+    fig = px.parallel_coordinates(data,
+                              color=color,
+                              color_continuous_scale=px.colors.diverging.Tealrose)
+    fig.update_layout(
+                        autosize=False,
+                        width=width_plotly,
+                        height=height_plotly,
+                        #title=go.layout.Title(text="Parallel coordinate plot of dataset"),
+                        #xaxis=dict(title=xlabel, range=[-0.1,10]),
+                        #yaxis=dict(title=ylabel, range=[-0.1,10]),
+                        font=dict(family="Palatino",
+                                  color="Black",
+                                  size=12),)
+
+    fig.write_image(str(Path(__file__).resolve().parents[2] / \
+                                "reports" / "figures"
+                                / Path(fileName)))
+    fig.show()
