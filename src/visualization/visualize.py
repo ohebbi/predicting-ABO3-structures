@@ -466,10 +466,13 @@ def plot_distribution_histogram(data, fileName):
     fig = px.histogram(data, x="t", color="Cubic",
                         marginal="box", # or violin, rug
                         hover_data=data.columns)
-    fig.update_layout(
+    fig.update_layout({"plot_bgcolor": "rgba(0, 0, 0, 0)",
+                           "paper_bgcolor": "rgba(0, 0, 0, 0)",
+                          },
                         autosize=False,
                         width=width_plotly,
                         height=height_plotly,
+                        margin=dict(l=80, r=80, t=100, b=90),
                         #title=go.layout.Title(text="Parallel coordinate plot of dataset"),
                         #xaxis=dict(title=xlabel, range=[-0.1,10]),
                         #yaxis=dict(title=ylabel, range=[-0.1,10]),
