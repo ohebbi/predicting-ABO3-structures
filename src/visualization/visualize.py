@@ -472,7 +472,7 @@ def plot_distribution_histogram(data, fileName):
                         autosize=False,
                         width=width_plotly,
                         height=height_plotly,
-                        margin=dict(l=80, r=80, t=100, b=90),
+                        margin=dict(l=0, r=0, t=0, b=0),
                         #title=go.layout.Title(text="Parallel coordinate plot of dataset"),
                         #xaxis=dict(title=xlabel, range=[-0.1,10]),
                         #yaxis=dict(title=ylabel, range=[-0.1,10]),
