@@ -460,3 +460,24 @@ def plot_parallel_coordinates(data, color, fileName):
                                 "reports" / "figures"
                                 / Path(fileName)))
     fig.show()
+
+def plot_distribution_histogram(data, fileName):
+
+    fig = px.histogram(data, x="t", color="Cubic",
+                        marginal="box", # or violin, rug
+                        hover_data=data.columns)
+    fig.update_layout(
+                        autosize=False,
+                        width=width_plotly,
+                        height=height_plotly,
+                        #title=go.layout.Title(text="Parallel coordinate plot of dataset"),
+                        #xaxis=dict(title=xlabel, range=[-0.1,10]),
+                        #yaxis=dict(title=ylabel, range=[-0.1,10]),
+                        font=dict(family="Palatino",
+                                  color="Black",
+                                  size=12),)
+
+    fig.write_image(str(Path(__file__).resolve().parents[2] / \
+                                "reports" / "figures"
+                                / Path(fileName)))
+    fig.show()
