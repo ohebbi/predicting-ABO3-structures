@@ -1,6 +1,6 @@
 def runPredictions(classifier, trainingData, trainingTarget, testData):
     print(classifier)
-
+    print(trainingData.shape, trainingTarget.shape)
     #train the model
     classifier.fit(trainingData, trainingTarget)
 

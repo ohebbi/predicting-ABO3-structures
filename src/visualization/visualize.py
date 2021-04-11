@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import plotly.express as px
-
+from plotly.subplots import make_subplots
 import shap
 from typing import Optional
 
@@ -15,13 +15,16 @@ from pathlib import Path
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import SelectFromModel
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
 # textwidth in LateX
 width = 411.14224
 
 height = ((5**.5 - 1) / 2 )*width
 
 width_plotly = 548.1896533333334 #pt to px
-height_plotly = ((5**.5 - 0.75) / 2 )*width_plotly
+height_plotly = ((5**.5 - 1.) / 2 )*width_plotly
 tex_fonts = {
     "text.usetex": True,
     "font.family": "Palatino",
@@ -131,32 +134,34 @@ def plot_accuracy(models, names, xlabel = "Cross validation folds"):
     fig.show()
 
 
-def plot_important_features(models, names,X, k, n):
-    fig = go.Figure(
-            layout = go.Layout (
-                title=go.layout.Title(text='Features used in model (Nruns = {})'.format(k*n)),
-                yaxis=dict(title="Number times"),
-                barmode='group'
-            )
-        )
+def plot_important_features(models, names, X, k, n, fileName):
+    fig = make_subplots(rows=models.shape[0], cols=1, shared_xaxes=True)
+    fig.update_layout({"plot_bgcolor": "rgba(0, 0, 0, 0)",
+                           "paper_bgcolor": "rgba(0, 0, 0, 0)",
+                          },
+                        barmode='group',
+                        autosize=False,
+                        width=width_plotly,
+                        height=height_plotly,
+                        margin=dict(l=0, r=0, t=25, b=0),
+                        title=go.layout.Title(text="Mean feature importance for {} iterations".format(k*n)),
+                        #xaxis=dict(title=xlabel),
+                        #yaxis=dict(title="Relative importance"),
+                        font=dict(family="Palatino",
+                                  color="Black",
+                                  size=12),)
 
     for i, model in enumerate(models):
-        fig.add_traces(go.Bar(name=names[i], x=X.columns.values, y=model['importantKeys']))
+        fig.add_traces(go.Bar(name=names[i], x=X.columns.values,
+                    y=np.mean(model["relativeImportance"], axis=0),
+                    error_y=dict(type='data', array=np.std(model["relativeImportance"], axis=0))), cols = 1, rows=i+1)
 
+    fig.write_image(str(Path(__file__).resolve().parents[2] / \
+                                    "reports" / "figures"
+                                    / Path(fileName)))
     fig.show()
 
-    fig = go.Figure(
-            layout = go.Layout (
-                title=go.layout.Title(text="Feature Importance for the 100th iteration".format(k*n)),
-                yaxis=dict(title='Relative importance'),
-                barmode='group'
-            )
-        )
 
-    for i, model in enumerate(models):
-        fig.add_traces(go.Bar(name=names[i], x=X.columns.values, y=model['relativeImportance']))
-
-    fig.show()
 def plot_confusion_metrics(models, names, data,  k, n, abbreviations=[], cubicCase=False):
     fig = go.Figure(
             layout = go.Layout (
@@ -245,9 +250,8 @@ def plot_confusion_matrix(models, y, data, abbreviations, names, k, n, cubicCase
 def confusion_matrix_plot(models, y, names):
     #print(mat)
     for i, model in enumerate(models):
-        mat = confusion_matrix(y.values.reshape(-1,), model["y_pred_full"])
-        print(mat)
-        sns.heatmap(mat.T, square=True, annot=True, fmt='d', cbar=False,
+
+        sns.heatmap(model["confusionMatrix"], square=True, annot=True, fmt='d', cbar=False,
                 xticklabels=[0,1],
                 yticklabels=[0,1])
         plt.xlabel('true label')
@@ -280,6 +284,7 @@ def runSupervisedModel(classifier,
                        featureImportance: Optional[bool] = False,
                        resamplingMethod: Optional[str] = "None"):
 
+
     modelResults = {
         'trainAccuracy':   np.zeros(n*k),
         'testAccuracy':    np.zeros(n*k),
@@ -290,7 +295,7 @@ def runSupervisedModel(classifier,
         'confusionMatrix': np.zeros((len(y), len(y))),
         'falsePositives':  np.zeros(len(y)),
         'falseNegatives':  np.zeros(len(y)),
-        'relativeImportance': np.zeros(len(X.columns.values))
+        'relativeImportance': np.zeros((n*k, len(X.columns.values)))
         }
 
     # Initializing Creating ROC metrics
@@ -317,9 +322,9 @@ def runSupervisedModel(classifier,
         X_train, X_test = X.iloc[train_index], X.iloc[test_index]
         y_train, y_test = y[train_index], y[test_index]
 
-
         #fit the model
         classifier.fit(X_train, y_train)
+
         if (featureImportance) and (type(classifier["model"]) != type(LogisticRegression())):
             sel_classifier.fit(X_train, y_train)
 
@@ -375,13 +380,13 @@ def runSupervisedModel(classifier,
         modelResults['falseNegatives'][falseNegatives] += 1
 
         if (featureImportance) and (type(classifier["model"]) != type(LogisticRegression())):
+            #print(sel_classifier.get_support().shape, modelResults['importantKeys'].shape)
             modelResults['importantKeys'][sel_classifier.get_support()] += 1
+            modelResults['relativeImportance'][i] = classifier.named_steps["model"].feature_importances_
         elif type(classifier["model"]) == type(LogisticRegression()):
+            #print(classifier.named_steps['model'].coef_)
             modelResults['importantKeys'][:] += 1
-
-    if (featureImportance) and (type(classifier["model"]) != type(LogisticRegression())):
-        modelResults['relativeImportance'] = classifier.named_steps["model"].feature_importances_
-
+            modelResults['relativeImportance'][i] = classifier.named_steps['model'].coef_
     ######################################
     ## Finding precision recall metrics ##
     ######################################
@@ -463,7 +468,7 @@ def plot_parallel_coordinates(data, color, fileName):
 
 def plot_distribution_histogram(data, fileName):
 
-    fig = px.histogram(data, x="t", color="Cubic",
+    fig = px.histogram(data, x="t", color="Perovskite",opacity=0.75, #color_discrete_sequence=px.colors.diverging.Tealrose,# color_discrete_midpoint=0,
                         marginal="box", # or violin, rug
                         hover_data=data.columns)
     fig.update_layout({"plot_bgcolor": "rgba(0, 0, 0, 0)",
