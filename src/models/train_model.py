@@ -10,7 +10,7 @@ from tqdm import tqdm
 import numpy as np
 
 from sklearn.model_selection import GridSearchCV, RepeatedStratifiedKFold
-from sklearn.metrics import accuracy_score,precision_score, recall_score, make_scorer
+from sklearn.metrics import accuracy_score,precision_score, recall_score, make_scorer, f1_score
 
 #Resampling
 from imblearn.over_sampling import SMOTE
@@ -60,26 +60,26 @@ def findParamGrid(model):
     typeModel = type(model)
 
     if typeModel == type(RandomForestClassifier()):
-        return {"model__n_estimators": [200, 500],
+        return {"model__n_estimators": [10,50,100,200,500,1000],
                 "model__max_features": ['auto', 'sqrt', 'log2'],
-                "model__max_depth" : [4,5],
+                "model__max_depth" : np.arange(1,8),
                 "model__criterion" :['gini'],#, 'entropy'],
                 }
     elif typeModel == type(GradientBoostingClassifier()):
         return {"model__loss":["deviance"],
                 #"model__learning_rate": [0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2],
-                #"model__min_samples_split": np.linspace(0.1, 0.5, 12),
-                #"model__min_samples_leaf": np.linspace(0.1, 0.5, 12),
-                "model__max_depth":[3,5,8],
+                "model__min_samples_split": np.linspace(0.1, 0.5, 3),
+                "model__min_samples_leaf": np.linspace(0.1, 0.5, 3),
+                "model__max_depth":np.arange(1,8),
                 "model__max_features":["log2","sqrt"],
                 #"model__criterion": ["friedman_mse",  "mae"],
                 #"model__subsample":[0.5, 0.618, 0.8, 0.85, 0.9, 0.95, 1.0],
-                "model__n_estimators":[10],
+                "model__n_estimators":[10,50,100,200,500,1000],
                 }
     elif typeModel == type(LogisticRegression()):#penalty{‘l1’, ‘l2’, ‘elasticnet’, ‘none’}
         return {"model__penalty":["l2"],# "l2", "elasticnet", "none"],
-                #"model__alpha": [0.001,0.01,0.1,1,10,100,1000],
-                "model__max_iter":[200, 400],
+                "model__C": np.logspace(-3,5,7),
+                "model__max_iter":[200, 400, 600, 800],
                 }
     else:
         raise TypeError("No model has been specified: type(model):{}".format(typeModel))
@@ -91,14 +91,16 @@ def applyGridSearch(X, y, model, cv, sampleMethod="under"):
     ## TODO: Insert these somehow in gridsearch (scoring=scoring,refit=False)
     scoring = {'accuracy':  make_scorer(accuracy_score),
                'precision': make_scorer(precision_score),
-               'recall':    make_scorer(recall_score)}
+               'recall':    make_scorer(recall_score),
+               'f1':        make_scorer(f1_score),
+               }
 
     # Making a pipeline
     pipe = getPipe(model, sampleMethod)
 
     # Do a gridSearch
-    grid = GridSearchCV(pipe, param_grid, cv=cv, n_jobs=-1)
-
+    grid = GridSearchCV(pipe, param_grid, scoring=scoring, refit="f1",
+                        cv=cv,verbose=2,return_train_score=True, n_jobs=-1)
     grid.fit(X, y)
 
     #print (grid.best_params_)

@@ -170,7 +170,17 @@ def plot_confusion_metrics(models, names, data,  k, n, abbreviations=[], cubicCa
                 barmode='group'
             )
         )
-
+    fig.update_layout({"plot_bgcolor": "rgba(0, 0, 0, 0)",
+                           "paper_bgcolor": "rgba(0, 0, 0, 0)",
+                          },
+                        autosize=False,
+                        width=width_plotly*2,
+                        height=height_plotly,
+                        margin=dict(l=0, r=0, t=25, b=0),
+                        font=dict(family="Palatino",
+                                  color="Black",
+                                  size=12),)
+    fig.update_xaxes(tickangle = 45, title_font = {"size": 8})
     for i, model in enumerate(models):
         if cubicCase is not False:
             fig.add_traces(go.Bar(name=names[i],
@@ -181,6 +191,10 @@ def plot_confusion_metrics(models, names, data,  k, n, abbreviations=[], cubicCa
                                   x=data['Compound'][model['falsePositives'] > 0],
                                   y=model['falsePositives'][model['falsePositives'] > 0]))
 
+    fig.write_image(str(Path(__file__).resolve().parents[2] / \
+                                    "reports" / "figures"
+                                    / Path("falsePositives-cubic:" + str(cubicCase) + ".pdf")))
+
     fig.show()
 
     fig = go.Figure(
@@ -190,6 +204,17 @@ def plot_confusion_metrics(models, names, data,  k, n, abbreviations=[], cubicCa
                 barmode='group'
             )
         )
+    fig.update_layout({"plot_bgcolor": "rgba(0, 0, 0, 0)",
+                               "paper_bgcolor": "rgba(0, 0, 0, 0)",
+                              },
+                            autosize=False,
+                            width=width_plotly*2,
+                            height=height_plotly,
+                            margin=dict(l=0, r=0, t=25, b=0),
+                            font=dict(family="Palatino",
+                                      color="Black",
+                                      size=12),)
+    fig.update_xaxes(tickangle = 45)
 
     for i, model in enumerate(models):
         if cubicCase is not False:
@@ -200,6 +225,10 @@ def plot_confusion_metrics(models, names, data,  k, n, abbreviations=[], cubicCa
             fig.add_traces(go.Bar(name=names[i],
                                   x=data['Compound'][model['falseNegatives'] > 0],
                                   y=model['falseNegatives'][model['falseNegatives'] > 0]))
+
+    fig.write_image(str(Path(__file__).resolve().parents[2] / \
+                                    "reports" / "figures"
+                                    / Path("falseNegatives-cubic:" + str(cubicCase) + ".pdf")))
 
     fig.show()
 
@@ -438,6 +467,17 @@ def runSupervisedModel(classifier,
     ax2.legend(loc="lower right")
     fig2.tight_layout()
 
+    # Savefig
+    dir_path = Path(__file__).resolve().parents[2] / \
+                                "reports" / "figures"
+
+    Path(dir_path / "CV-ROC").mkdir(parents=True, exist_ok=True)
+    Path(dir_path / "PR-RE").mkdir(parents=True, exist_ok=True)
+
+    fig1.savefig(dir_path / "CV-ROC" / Path(title + ".pdf") , format="pdf", bbox_inches="tight")
+    fig2.savefig(dir_path / "PR-RE"  / Path(title + ".pdf") , format="pdf", bbox_inches="tight")
+
+
     plt.show()
 
     print ("Mean accuracy:{:0.5f}".format(np.mean(modelResults['testAccuracy'])))
@@ -445,6 +485,7 @@ def runSupervisedModel(classifier,
     print ("f1-score:{:0.5f}".format(modelResults['f1_score'][-1]))
 
     return modelResults
+
 def plot_parallel_coordinates(data, color, fileName):
 
     fig = px.parallel_coordinates(data,
@@ -489,3 +530,65 @@ def plot_distribution_histogram(data, fileName):
                                 "reports" / "figures"
                                 / Path(fileName)))
     fig.show()
+
+def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames:str, cubicCase:bool = False):
+
+    scaledTrainingData = StandardScaler().fit_transform(X) # normalizing the features
+    pca = PCA().fit(scaledTrainingData)
+    #print(pca.explained_variance_ratio_)
+    for i, algorithm in enumerate(ModelsBestParams):
+        #print(algorithm.estimator.named_steps["model"])
+        if type(algorithm.estimator.named_steps["model"]) == type(LogisticRegression()):
+            components_col = 'param_model__C'
+            xlabel = "Inverse of regularization strength"
+            xscale = "log"
+            best_param = algorithm.best_estimator_.named_steps['model'].C
+        else:
+            components_col = 'param_model__max_depth'
+            xlabel = "Max depth"
+            xscale = "linear"
+            best_param = algorithm.best_estimator_.named_steps['model'].max_depth
+
+        fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=set_size(width, 1))
+
+        # For each number of components, find the best classifier results
+        results = pd.DataFrame(algorithm.cv_results_)
+        best_clfs = results.groupby(components_col).apply(
+            lambda g: g.nlargest(1, 'mean_test_accuracy'))
+
+        best_clfs.plot(x=components_col, y='mean_test_accuracy', yerr='std_test_accuracy',
+                       label="Test score", ax=ax0, capsize=4)
+
+        best_clfs.plot(x=components_col, y='mean_train_accuracy', yerr='std_train_accuracy',
+                       label="Train score", ax=ax0, capsize=4)
+        best_clfs.plot(x=components_col, y='mean_test_f1', yerr='std_test_f1',
+                       label="f1 score", ax=ax0, capsize=4)
+
+
+        ax0.axvline(best_param, linestyle=':', label='Optimal')
+
+        #ax1.legend(prop=dict(size=12))
+
+        ax0.set_ylabel('Classification accuracy')
+        ax0.set_xlabel(xlabel)
+        ax0.set_title("Optimal param per PC for {}".format(prettyNames[i]))
+        ax0.set_xscale(xscale)
+        #ax0.set_xlim([0.5,numPC+0.5])
+        #ax1.set_xlim([0.5,numPC+0.5])
+
+        #ax1.set_ylim([0,pca.explained_variance_ratio_.cumsum()[numPC+2]])
+        #ax0.xaxis.set_major_formatter(plt.NullFormatter())
+
+        #ax0.set_xticks(range(1,numPC+1))
+        #ax1.set_xticks(range(1,numPC+1))
+
+        fig.tight_layout()
+
+        dir_path = Path(__file__).resolve().parents[2] / \
+                            "reports" / "figures"  / "grid-scores"
+
+        Path(dir_path / "PR-RE").mkdir(parents=True, exist_ok=True)
+
+        fig.savefig(dir_path / Path(prettyNames[i] + "-cubic:" + str(cubicCase) + ".pdf") , format="pdf", bbox_inches="tight")
+
+        plt.show()
