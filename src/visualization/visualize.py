@@ -571,7 +571,7 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
 
         ax0.set_ylabel('Classification accuracy')
         ax0.set_xlabel(xlabel)
-        ax0.set_title("Optimal param per PC for {}".format(prettyNames[i]))
+        ax0.set_title("Best estimator per parameter: {}".format(prettyNames[i]))
         ax0.set_xscale(xscale)
         #ax0.set_xlim([0.5,numPC+0.5])
         #ax1.set_xlim([0.5,numPC+0.5])
