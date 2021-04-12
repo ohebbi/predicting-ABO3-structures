@@ -7,7 +7,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import shap
 from typing import Optional
-
+import joblib
 import seaborn as sns
 from tqdm import tqdm
 from sklearn.metrics import auc, average_precision_score, roc_curve, precision_recall_curve, f1_score
@@ -535,9 +535,12 @@ def plot_distribution_histogram(data, fileName):
 
 def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames:str, cubicCase:bool = False):
 
-    fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=(set_size(width, 0.5)[0],set_size(width, 0.5)[0]))
+
 
     for i, algorithm in enumerate(ModelsBestParams):
+
+        fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=(set_size(width, 0.5)[0],set_size(width, 0.5)[0]))
+
         #print(algorithm.estimator.named_steps["model"])
         if type(algorithm.estimator.named_steps["model"]) == type(LogisticRegression()):
             components_col = 'param_model__C'
@@ -598,3 +601,88 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
         fig.savefig(dir_path / Path(prettyNames[i] + "-cubic:" + str(cubicCase) + ".pdf") , format="pdf", bbox_inches="tight")
 
         plt.show()
+def contourPlotFeatures(df, prettyNames, typeModel):
+    fig = make_subplots(rows=2, cols=2, shared_xaxes=True)
+
+    fig.update_layout({"plot_bgcolor": "rgba(0, 0, 0, 0)",
+                               "paper_bgcolor": "rgba(0, 0, 0, 0)",
+                              },
+                            barmode='group',
+                            autosize=False,
+                            width=width_plotly,
+                            height=height_plotly,
+                            margin=dict(l=0, r=0, t=25, b=0),
+                            title=go.layout.Title(text=""),
+                            #xaxis=dict(title="Number principal components"),
+                            #yaxis=dict(title="Relative importance"),
+                            font=dict(family="Palatino",
+                                      color="Black",
+                                      size=12),)
+    plotFeatures = ["rB", "dAO", "t"]
+    for i in range(len(prettyNames)):
+
+        classifier = joblib.load(Path(__file__).resolve().parents[2] / "models" / typeModel / Path(prettyNames[i] + ".pkl"))
+        plotFeatures = joblib.load(Path(__file__).resolve().parents[2] / "models" / typeModel / Path(prettyNames[i] + "features.pkl"))
+
+        df["Predictions"]       = classifier.predict(df[plotFeatures])
+        df["Cubic probability"] = classifier.predict_proba(df[plotFeatures])[:,1]
+        Z_grid = np.array(df["Cubic probability"]).reshape(points,points,points)
+
+        fig = go.Figure(data =
+            go.Contour(
+                z=Z_grid[:,0,:],
+                x=feature_rB, # horizontal axis
+                y=feature_t # vertical axis
+            ),
+                layout = Layout(
+                    title=go.layout.Title(text="Probability for perovskite prediction"),
+                        scene=layout.Scene(
+                        xaxis=dict(title='rB'),
+                        yaxis=dict(title='t'),
+                    )))
+    fig.show()
+
+def plot_2Dcontours(X, y, prettyNames, typeModel):
+    X = X[["rB", "t"]].to_numpy()
+
+    # Plotting decision regions
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.1),
+                         np.arange(y_min, y_max, 0.1))
+
+
+    f, axarr = plt.subplots(2, 2, sharex='col', sharey='row', figsize=set_size(width, 1, subplots=(2,2)))
+    from itertools import product
+    for i, idx in zip(range(len(prettyNames)), product([0,1], [0,1])):
+
+        classifier = joblib.load(Path(__file__).resolve().parents[2] / "models" / typeModel / Path(prettyNames[i] + ".pkl"))
+        plotFeatures = joblib.load(Path(__file__).resolve().parents[2] / "models" / typeModel / Path(prettyNames[i] + "features.pkl"))
+
+        classifier.fit(X, y)
+
+        Z = classifier.predict(np.c_[xx.ravel(), yy.ravel()])
+        Z = Z.reshape(xx.shape)
+
+        axarr[idx[0], idx[1]].contourf(xx, yy, Z, alpha=0.4)
+        axarr[idx[0], idx[1]].scatter(X[:, 0], X[:, 1], c=y,
+                                      s=20, edgecolor='k')
+        axarr[idx[0], idx[1]].set_title(prettyNames[i])
+        axarr[idx[0], idx[1]].set_xlim([0,1.1])
+        axarr[idx[0], idx[1]].set_ylim([0.6,1.6])
+        #ax1.set_xlim([0.5,numPC+0.5])
+    f.add_subplot(111, frameon=False)
+    # hide tick and tick label of the big axis
+    plt.tick_params(labelcolor='none', which='both', top=False, bottom=False, left=False, right=False)
+    plt.xlabel("$rB$")
+    plt.ylabel("$t$")
+    f.tight_layout()
+
+    dir_path = Path(__file__).resolve().parents[2] / \
+                                "reports" / "figures"  / "contours"
+
+    Path(dir_path).mkdir(parents=True, exist_ok=True)
+
+    f.savefig(dir_path / Path(typeModel + ".pdf") , format="pdf", bbox_inches="tight")
+    f.show()
+            #axarr[idx[0], idx[1]].set_title(tt)
