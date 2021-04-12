@@ -541,7 +541,7 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
         #print(algorithm.estimator.named_steps["model"])
         if type(algorithm.estimator.named_steps["model"]) == type(LogisticRegression()):
             components_col = 'param_model__C'
-            xlabel = "Inverse of regularization strength"
+            xlabel = "Reg. strength"
             xscale = "log"
             best_param = algorithm.best_estimator_.named_steps['model'].C
         else:
@@ -550,7 +550,7 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
             xscale = "linear"
             best_param = algorithm.best_estimator_.named_steps['model'].max_depth
 
-        fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=set_size(width, 0.5))
+        fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=(set_size(width, 0.6)[0],set_size(width, 0.6)[0]))
 
         # For each number of components, find the best classifier results
         results = pd.DataFrame(algorithm.cv_results_)
@@ -570,9 +570,9 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
 
         #ax1.legend(prop=dict(size=12))
 
-        ax0.set_ylabel('Classification accuracy')
+        ax0.set_ylabel('Accuracy')
         ax0.set_xlabel(xlabel)
-        ax0.set_title("Best estimator per parameter: {}".format(prettyNames[i]))
+        ax0.set_title("Best estimator {}".format(prettyNames[i]))
         ax0.set_xscale(xscale)
         #ax0.set_xlim([0.5,numPC+0.5])
         #ax1.set_xlim([0.5,numPC+0.5])
@@ -582,6 +582,12 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
 
         #ax0.set_xticks(range(1,numPC+1))
         #ax1.set_xticks(range(1,numPC+1))
+        # Put a legend below current axis
+        #box = ax0.get_position()
+        #ax0.set_position([box.x0, box.y0 + box.height * 0.1,
+        #         box.width, box.height * 0.9])
+
+        #ax0.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),fancybox=True, shadow=True, ncol=5)
 
         fig.tight_layout()
 
