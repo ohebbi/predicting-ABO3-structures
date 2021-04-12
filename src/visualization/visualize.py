@@ -17,6 +17,7 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from sklearn.tree import DecisionTreeClassifier
 
 # textwidth in LateX
 width = 411.14224
@@ -534,9 +535,8 @@ def plot_distribution_histogram(data, fileName):
 
 def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames:str, cubicCase:bool = False):
 
-    scaledTrainingData = StandardScaler().fit_transform(X) # normalizing the features
-    pca = PCA().fit(scaledTrainingData)
-    #print(pca.explained_variance_ratio_)
+    fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=(set_size(width, 0.5)[0],set_size(width, 0.5)[0]))
+
     for i, algorithm in enumerate(ModelsBestParams):
         #print(algorithm.estimator.named_steps["model"])
         if type(algorithm.estimator.named_steps["model"]) == type(LogisticRegression()):
@@ -550,7 +550,6 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
             xscale = "linear"
             best_param = algorithm.best_estimator_.named_steps['model'].max_depth
 
-        fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=(set_size(width, 0.5)[0],set_size(width, 0.5)[0]))
 
         # For each number of components, find the best classifier results
         results = pd.DataFrame(algorithm.cv_results_)

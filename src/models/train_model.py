@@ -8,6 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from tqdm import tqdm
 import numpy as np
+from sklearn.tree import DecisionTreeClassifier
 
 from sklearn.model_selection import GridSearchCV, RepeatedStratifiedKFold
 from sklearn.metrics import accuracy_score,precision_score, recall_score, make_scorer, f1_score
@@ -78,6 +79,15 @@ def findParamGrid(model):
                 #"model__subsample":[0.5, 0.618, 0.8, 0.85, 0.9, 0.95, 1.0],
                 "model__n_estimators":[10,50,100,200,500,1000],
                 }
+    elif typeModel == type(DecisionTreeClassifier()):
+        return {"model__max_features": ['sqrt', 'log2'],
+                #"model__min_samples_split": np.linspace(0.1, 0.5, 2),
+                #"model__min_samples_leaf": np.linspace(0.1, 0.5, 2),
+                "model__max_depth" : np.arange(1,8),
+                "model__ccp_alpha" : np.arange(0, 1, 0.05)
+                #"model__criterion" :['gini'],#, 'entropy'],
+                }
+
     elif typeModel == type(LogisticRegression()):#penalty{‘l1’, ‘l2’, ‘elasticnet’, ‘none’}
         return {"model__penalty":["l2"],# "l2", "elasticnet", "none"],
                 "model__C": np.logspace(-3,5,7),
