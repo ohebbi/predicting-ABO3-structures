@@ -60,7 +60,7 @@ def findParamGrid(model):
     typeModel = type(model)
 
     if typeModel == type(RandomForestClassifier()):
-        return {"model__n_estimators": np.logspace(-3,5,7),
+        return {"model__n_estimators": [10,50,100,200,500,1000],
                 "model__max_features": ['sqrt', 'log2'],
                 "model__min_samples_split": np.linspace(0.1, 0.5, 2),
                 "model__min_samples_leaf": np.linspace(0.1, 0.5, 2),
@@ -76,7 +76,7 @@ def findParamGrid(model):
                 "model__max_features":["log2","sqrt"],
                 #"model__criterion": ["friedman_mse",  "mae"],
                 #"model__subsample":[0.5, 0.618, 0.8, 0.85, 0.9, 0.95, 1.0],
-                "model__n_estimators":np.logspace(0,5,4),
+                "model__n_estimators":[10,50,100,200,500,1000],
                 }
     elif typeModel == type(LogisticRegression()):#penalty{‘l1’, ‘l2’, ‘elasticnet’, ‘none’}
         return {"model__penalty":["l2"],# "l2", "elasticnet", "none"],

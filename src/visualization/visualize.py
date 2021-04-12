@@ -29,10 +29,11 @@ tex_fonts = {
     "text.usetex": True,
     "font.family": "Palatino",
     "axes.labelsize":12,
+    "axes.titlesize":12,
     "font.size": 12,
     "legend.fontsize": 10,
     "xtick.labelsize": 12,
-    "ytick.labelsize":12
+    "ytick.labelsize":12,
 }
 plt.rcParams.update(tex_fonts)
 
@@ -549,7 +550,7 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
             xscale = "linear"
             best_param = algorithm.best_estimator_.named_steps['model'].max_depth
 
-        fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=set_size(width, 1))
+        fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=set_size(width, 0.5))
 
         # For each number of components, find the best classifier results
         results = pd.DataFrame(algorithm.cv_results_)
