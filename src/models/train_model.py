@@ -62,16 +62,16 @@ def findParamGrid(model):
     if typeModel == type(RandomForestClassifier()):
         return {"model__n_estimators": [10,50,100,200,500,1000],
                 "model__max_features": ['sqrt', 'log2'],
-                "model__min_samples_split": np.linspace(0.1, 0.5, 2),
-                "model__min_samples_leaf": np.linspace(0.1, 0.5, 2),
+                #"model__min_samples_split": np.linspace(0.1, 0.5, 2),
+                #"model__min_samples_leaf": np.linspace(0.1, 0.5, 2),
                 "model__max_depth" : np.arange(1,8),
                 #"model__criterion" :['gini'],#, 'entropy'],
                 }
     elif typeModel == type(GradientBoostingClassifier()):
         return {"model__loss":["deviance"],
                 #"model__learning_rate": [0.01, 0.025, 0.05, 0.075, 0.1, 0.15, 0.2],
-                "model__min_samples_split": np.linspace(0.1, 0.5, 2),
-                "model__min_samples_leaf": np.linspace(0.1, 0.5, 2),
+                #"model__min_samples_split": np.linspace(0.1, 0.5, 2),
+                #"model__min_samples_leaf": np.linspace(0.1, 0.5, 2),
                 "model__max_depth":np.arange(1,8),
                 "model__max_features":["log2","sqrt"],
                 #"model__criterion": ["friedman_mse",  "mae"],
