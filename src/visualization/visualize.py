@@ -3,9 +3,9 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import plotly.express as px
 from plotly.subplots import make_subplots
-import shap
 from typing import Optional
 import joblib
 import seaborn as sns
@@ -18,6 +18,7 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.tree import DecisionTreeClassifier
+import tikzplotlib
 
 # textwidth in LateX
 width = 411.14224
@@ -26,19 +27,8 @@ height = ((5**.5 - 1) / 2 )*width
 
 width_plotly = 548.1896533333334 #pt to px
 height_plotly = ((5**.5 - 1.) / 2 )*width_plotly
-tex_fonts = {
-    "text.usetex": True,
-    "font.family": "Palatino",
-    "axes.labelsize":12,
-    "axes.titlesize":12,
-    "font.size": 12,
-    "legend.fontsize": 10,
-    "xtick.labelsize": 12,
-    "ytick.labelsize":12,
-}
-plt.rcParams.update(tex_fonts)
 
-def set_size(width, fraction=1, subplots=(1,1)):
+def set_size(width, fraction=1, subplots=(1,1), isTex=False):
     """ Set fgure dimensions to avoid scaling in LateX.
 
     Args
@@ -68,8 +58,30 @@ def set_size(width, fraction=1, subplots=(1,1)):
     fig_width_in = fig_width_pt * inches_per_pt
     # Figure height in inches
     fig_height_in = fig_width_in * golden_ratio * (subplots[0] / subplots[1])
-
+    if isTex:
+        return (fig_width_in, fig_height_in*1) #cm
     return (fig_width_in, fig_height_in)
+
+
+pgf_with_latex = {                      # setup matplotlib to use latex for output
+    "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
+    "text.usetex": True,                # use LaTeX to write all text
+    "font.family": "Palatino",
+    "font.serif": [],                   # blank entries should cause plots
+    "font.sans-serif": [],              # to inherit fonts from the document
+    "font.monospace": [],
+    "axes.labelsize": 10,               # LaTeX default is 10pt font.
+    "font.size": 10,
+    "font.weight": "bold",
+    "axes.labelweight": "bold",
+    "legend.fontsize": 8,               # Make the legend/label fonts
+    "xtick.labelsize": 8,               # a little smaller
+    "ytick.labelsize": 8,
+    "figure.figsize": set_size(width, 0.9),     # default fig size of 0.9 textwidth
+    "pgf.preamble": r"\usepackage[detect-all,locale=DE]{siunitx} \usepackage[T1]{fontenc} \usepackage[utf8x]{inputenc}"
+    }
+
+mpl.rcParams.update(pgf_with_latex)
 
 def plot_accuracy(models, names, xlabel = "Cross validation folds"):
 
@@ -165,6 +177,7 @@ def plot_important_features(models, names, X, k, n, fileName):
 
 
 def plot_confusion_metrics(models, names, data,  k, n, abbreviations=[], cubicCase=False):
+
     fig = go.Figure(
             layout = go.Layout (
                 title=go.layout.Title(text="False positives (Nruns = {})".format(k*n)),
@@ -535,8 +548,6 @@ def plot_distribution_histogram(data, fileName):
 
 def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames:str, cubicCase:bool = False):
 
-
-
     for i, algorithm in enumerate(ModelsBestParams):
 
         fig, ax0 = plt.subplots(nrows=1, sharex=True, figsize=(set_size(width, 0.5)[0],set_size(width, 0.5)[0]))
@@ -557,24 +568,34 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
         # For each number of components, find the best classifier results
         results = pd.DataFrame(algorithm.cv_results_)
         best_clfs = results.groupby(components_col).apply(
-            lambda g: g.nlargest(1, 'mean_test_accuracy'))
-
-        best_clfs.plot(x=components_col, y='mean_test_accuracy', yerr='std_test_accuracy',
-                       label="Test score", ax=ax0, capsize=4)
+            lambda g: g.nlargest(1, 'mean_test_f1'))
+        display(best_clfs[["mean_test_accuracy", "mean_test_precision", "mean_test_recall", "mean_test_f1"]])
+        display(best_clfs[["std_test_accuracy", "std_test_precision", "std_test_recall", "std_test_f1"]])
 
         best_clfs.plot(x=components_col, y='mean_train_accuracy', yerr='std_train_accuracy',
-                       label="Train score", ax=ax0, capsize=4)
+                       label="Train", ax=ax0, capsize=4)
+
+        best_clfs.plot(x=components_col, y='mean_test_accuracy', yerr='std_test_accuracy',
+                       label="Test", ax=ax0, capsize=4)
+
+        best_clfs.plot(x=components_col, y='mean_test_precision', yerr='std_test_precision',
+                       label="Precision", ax=ax0, capsize=4)
+
+        best_clfs.plot(x=components_col, y='mean_test_recall', yerr='std_test_recall',
+                       label="Recall", ax=ax0, capsize=4)
+
         best_clfs.plot(x=components_col, y='mean_test_f1', yerr='std_test_f1',
-                       label="f1 score", ax=ax0, capsize=4)
+                       label="f1", ax=ax0, capsize=4)
 
+        nameMapping = {"LOG ": "Logistic regression", "DT ": "Decision tree", "RF ": "Random forest", "GB ": "Gradient boost"}
 
-        ax0.axvline(best_param, linestyle=':', label='Optimal')
+        ax0.axvline(best_param, linestyle='dashdot', label='Optimal', color="tab:purple")
 
         #ax1.legend(prop=dict(size=12))
 
-        ax0.set_ylabel('Accuracy')
+        ax0.set_ylabel('Score')
         ax0.set_xlabel(xlabel)
-        ax0.set_title("Best estimator {}".format(prettyNames[i]))
+        ax0.set_title(nameMapping[prettyNames[i]])
         ax0.set_xscale(xscale)
         #ax0.set_xlim([0.5,numPC+0.5])
         #ax1.set_xlim([0.5,numPC+0.5])
@@ -590,15 +611,19 @@ def gridsearchVSscores(X: pd.DataFrame, ModelsBestParams: pd.Series, prettyNames
         #         box.width, box.height * 0.9])
 
         #ax0.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),fancybox=True, shadow=True, ncol=5)
-
-        fig.tight_layout()
+        ax0.get_legend().remove()
+        #fig.tight_layout()
 
         dir_path = Path(__file__).resolve().parents[2] / \
                             "reports" / "figures"  / "grid-scores"
 
-        Path(dir_path / "PR-RE").mkdir(parents=True, exist_ok=True)
+        Path(dir_path).mkdir(parents=True, exist_ok=True)
 
-        fig.savefig(dir_path / Path(prettyNames[i] + "-cubic:" + str(cubicCase) + ".pdf") , format="pdf", bbox_inches="tight")
+        fig.savefig(dir_path / Path(prettyNames[i][:-1] + "-cubic:" + str(cubicCase) + ".pdf") , format="pdf", bbox_inches="tight")
+
+        tikzplotlib.save(dir_path / Path(prettyNames[i][:-1] + "-cubic:" + str(cubicCase) + ".tex"),
+                        axis_height = str(set_size(width, 0.45, isTex=True)[0]) + "in",
+                        axis_width  = str(set_size(width, 0.45, isTex=True)[0]) + "in")
 
         plt.show()
 def contourPlotFeatures(df, prettyNames, typeModel):
@@ -642,8 +667,8 @@ def contourPlotFeatures(df, prettyNames, typeModel):
                     )))
     fig.show()
 
-def plot_2Dcontours(X, y, prettyNames, typeModel):
-    X = X[["rB", "t"]].to_numpy()
+def plot_2Dcontours(X, y, twoFeatures, prettyNames, typeModel):
+    X = X[twoFeatures].to_numpy()
 
     # Plotting decision regions
     x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
@@ -686,3 +711,88 @@ def plot_2Dcontours(X, y, prettyNames, typeModel):
     f.savefig(dir_path / Path(typeModel + ".pdf") , format="pdf", bbox_inches="tight")
     f.show()
             #axarr[idx[0], idx[1]].set_title(tt)
+
+def make_parallel_coordinate_matplot(df, title, applyLegend=False):
+    import matplotlib.pyplot as plt
+    import matplotlib.patches as patches
+    import numpy as np
+    from matplotlib.colors import ListedColormap
+    targetNames = ["Cubic perovskite", "Nonperovskite", "Perovskite"]
+    tmp = df["Cubic"]
+    df = df.drop("Cubic", axis=1)
+    df["Cubic"] = tmp
+    df = df.groupby('Cubic').apply(lambda s: s.sample(min(len(s), 150)))
+
+    ynames = df.columns.values
+    ys = df.to_numpy()
+    ymins = ys.min(axis=0)
+    ymaxs = ys.max(axis=0)
+
+    dys = ymaxs - ymins
+    ymins -= dys * 0.05  # add 5% padding below and above
+    ymaxs += dys * 0.05
+
+    #ymaxs[1], ymins[1] = ymins[1], ymaxs[1]  # reverse axis 1 to have less crossings
+    dys = ymaxs - ymins
+
+    # transform all data to be compatible with the main axis
+    zs = np.zeros_like(ys)
+    zs[:, 0] = ys[:, 0]
+    zs[:, :] = (ys[:, :] - ymins[:]) / dys[:] * dys[0] + ymins[0]
+
+    if (applyLegend):
+        fig, host = plt.subplots(figsize=(set_size(width, 1)[0],set_size(width, 0.9)[1]))
+    else:
+        fig, host = plt.subplots(figsize=(set_size(width, 1)[0],set_size(width, 0.65)[1]))
+
+    axes = [host] + [host.twinx() for i in range(ys.shape[1] - 1)]
+    for i, ax in enumerate(axes):
+        ax.set_ylim(ymins[i], ymaxs[i])
+        ax.spines['top'].set_visible(False)
+        ax.spines['bottom'].set_visible(False)
+        if ax != host:
+            ax.spines['left'].set_visible(False)
+            ax.yaxis.set_ticks_position('right')
+            ax.spines["right"].set_position(("axes", i / (ys.shape[1] - 1)))
+
+    host.set_xlim(0, ys.shape[1] - 1)
+    host.set_xticks(range(ys.shape[1]))
+    host.set_xticklabels(ynames, fontsize=10)
+    host.tick_params(axis='x', which='major', pad=7)
+    host.spines['right'].set_visible(False)
+    host.xaxis.tick_top()
+    host.set_title(title)
+    colors = ['lavender', "limegreen", "tomato"]
+    legend_handles = [None for _ in targetNames]
+    for j in tqdm(range(ys.shape[0])):
+        # create bezier curves
+        verts = list(zip([x for x in np.linspace(0, len(ys) - 1, len(ys) * 3 - 2, endpoint=True)],
+                         np.repeat(zs[j, :], 3)[1:-1]))
+        codes = [mpl.path.Path.MOVETO] + [mpl.path.Path.CURVE4 for _ in range(len(verts) - 1)]
+        path = mpl.path.Path(verts, codes)
+        #print(colors[int(generatedData["candidate"].values[j])])
+        patch = patches.PathPatch(path, facecolor='none', lw=0.5, alpha=0.5, edgecolor=colors[int(df["Cubic"].values[j])])
+        legend_handles[int(df["Cubic"].values[j])] = patch
+        host.add_patch(patch)
+
+    from matplotlib.lines import Line2D
+    legend_elements = [Line2D([0], [0], color='limegreen', label='Cubic perovskite'),
+                       Line2D([0], [0], color='tomato', label='Perovskite'),
+                       Line2D([0], [0], color='lavender', label='Nonperovskite')]
+    if (applyLegend):
+        host.legend(handles=legend_elements,
+                loc='lower center', bbox_to_anchor=(0.5, -0.25),
+                ncol=len(targetNames), fancybox=False, shadow=False)
+
+    plt.tight_layout()
+
+
+    dir_path = Path(__file__).resolve().parents[2] / \
+                            "reports" / "figures"  / "parallel_coordinates"
+
+    Path(dir_path).mkdir(parents=True, exist_ok=True)
+
+    fig.savefig(dir_path / "cubicCase.pdf" , format="pdf", bbox_inches="tight")
+
+
+    plt.show()

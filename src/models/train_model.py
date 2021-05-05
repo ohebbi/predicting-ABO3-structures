@@ -11,7 +11,7 @@ import numpy as np
 from sklearn.tree import DecisionTreeClassifier
 
 from sklearn.model_selection import GridSearchCV, RepeatedStratifiedKFold
-from sklearn.metrics import accuracy_score,precision_score, recall_score, make_scorer, f1_score
+from sklearn.metrics import balanced_accuracy_score,precision_score, recall_score, make_scorer, f1_score
 
 #Resampling
 from imblearn.over_sampling import SMOTE
@@ -61,8 +61,8 @@ def findParamGrid(model):
     typeModel = type(model)
 
     if typeModel == type(RandomForestClassifier()):
-        return {"model__n_estimators": [10,50,100,200,500,1000],
-                "model__max_features": ['sqrt', 'log2'],
+        return {"model__n_estimators": [10,50,100,200],#,500,1000],
+                #"model__max_features": ['sqrt', 'log2'],
                 #"model__min_samples_split": np.linspace(0.1, 0.5, 2),
                 #"model__min_samples_leaf": np.linspace(0.1, 0.5, 2),
                 "model__max_depth" : np.arange(1,8),
@@ -74,17 +74,17 @@ def findParamGrid(model):
                 #"model__min_samples_split": np.linspace(0.1, 0.5, 2),
                 #"model__min_samples_leaf": np.linspace(0.1, 0.5, 2),
                 "model__max_depth":np.arange(1,8),
-                "model__max_features":["log2","sqrt"],
+                #"model__max_features":["log2","sqrt"],
                 #"model__criterion": ["friedman_mse",  "mae"],
                 #"model__subsample":[0.5, 0.618, 0.8, 0.85, 0.9, 0.95, 1.0],
-                "model__n_estimators":[10,50,100,200,500,1000],
+                "model__n_estimators":[10,50,100,200]#,500,1000],
                 }
     elif typeModel == type(DecisionTreeClassifier()):
-        return {"model__max_features": ['sqrt', 'log2'],
+        #return {"model__max_features": ['sqrt', 'log2'],
                 #"model__min_samples_split": np.linspace(0.1, 0.5, 2),
                 #"model__min_samples_leaf": np.linspace(0.1, 0.5, 2),
-                "model__max_depth" : np.arange(1,8),
-                "model__ccp_alpha" : np.arange(0, 1, 0.05)
+        return  {"model__max_depth" : np.arange(1,8)
+                #"model__ccp_alpha" : np.arange(0, 1, 0.05)
                 #"model__criterion" :['gini'],#, 'entropy'],
                 }
 
@@ -101,7 +101,7 @@ def applyGridSearch(X, y, model, cv, sampleMethod="under"):
     param_grid = findParamGrid(model)
 
     ## TODO: Insert these somehow in gridsearch (scoring=scoring,refit=False)
-    scoring = {'accuracy':  make_scorer(accuracy_score),
+    scoring = {'accuracy':  make_scorer(balanced_accuracy_score),
                'precision': make_scorer(precision_score),
                'recall':    make_scorer(recall_score),
                'f1':        make_scorer(f1_score),
@@ -115,6 +115,6 @@ def applyGridSearch(X, y, model, cv, sampleMethod="under"):
                         cv=cv,verbose=2,return_train_score=True, n_jobs=-1)
     grid.fit(X, y)
 
-    #print (grid.best_params_)
+    print (grid.best_params_)
 
     return grid.best_estimator_, grid
