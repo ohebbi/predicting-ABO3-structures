@@ -1,11 +1,18 @@
 # Predicting ABO3 structures [![DOI](https://zenodo.org/badge/289915727.svg)](https://zenodo.org/badge/latestdoi/289915727)
-==============================
 
 This repository contains the main work regarding the validation part of my master
 thesis. The work can be found in the notebooks, and is written as a Python package
 for complete reproduction with the respective requirements of packages.
 
-Project Organization
+## Development
+
+Clone the project, and run "pip install -e ." and you are ready for development.  
+
+## Run project
+
+The application of this project is centered around Jupyter notebooks. It is not neccessary to run anything to see result, only consult the notebooks either here on Github or [Jupyers` nbviewer project](https://nbviewer.jupyter.org/).Project Organization
+
+## Project Organization
 ------------
 
     ├── LICENSE
@@ -53,7 +60,8 @@ Project Organization
             └── visualize.py
 
 
---------
+
+## Update requirements
 > virtualenv -p python3 envname
 
 > pip3 install -e .
